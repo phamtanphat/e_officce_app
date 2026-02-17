@@ -21,12 +21,25 @@ class AppThemeMode extends _$AppThemeMode {
   }
 
   Future<void> updateMode(ThemeMode mode) async {
-    // Cập nhật state UI ngay lập tức
+    final previousMode = state.asData?.value ?? ThemeMode.system;
     state = AsyncValue.data(mode);
 
-    // 3. Lấy service để lưu dữ liệu xuống máy
     final storage = ref.read(storageServiceProvider);
-    await storage.set(Constant.themeModeKey, mode.name);
+    final result = await AsyncValue.guard(() async {
+      final saved = await storage.set(Constant.themeModeKey, mode.name);
+      if (!saved) {
+        throw StateError('Failed to persist theme mode');
+      }
+    });
+
+    if (result.hasError) {
+      state = AsyncValue.data(previousMode);
+      result.whenOrNull(
+        error: (error, stackTrace) {
+          Error.throwWithStackTrace(error, stackTrace);
+        },
+      );
+    }
   }
 }
 

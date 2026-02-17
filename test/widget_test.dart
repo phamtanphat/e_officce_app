@@ -1,31 +1,40 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
+import 'package:e_officce_tfc/core/storage/local/shared_preference_provider.dart';
+import 'package:e_officce_tfc/core/storage/local/shared_preference_service.dart';
 import 'package:e_officce_tfc/features/app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:e_officce_tfc/main.dart';
+class _FakeStorageService implements SharedPreferenceService {
+  @override
+  Future<void> clear() async {}
+
+  @override
+  Future<Object?> get(String key) async => null;
+
+  @override
+  Future<bool> has(String key) async => false;
+
+  @override
+  Future<bool> remove(String key) async => true;
+
+  @override
+  Future<bool> set(String key, String data) async => true;
+}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+  testWidgets('MyApp bootstraps with Riverpod overrides',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          storageServiceProvider.overrideWithValue(_FakeStorageService()),
+        ],
+        child: const MyApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.byType(MaterialApp), findsOneWidget);
   });
 }

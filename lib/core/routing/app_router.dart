@@ -7,7 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'app_router.g.dart';
 
 // Define route screen
-@riverpod
+@Riverpod(keepAlive: true)
 GoRouter router(Ref ref) {
   return GoRouter(
     initialLocation: Routes.splash,

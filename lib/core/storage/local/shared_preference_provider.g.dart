@@ -50,4 +50,4 @@ final class StorageServiceProvider extends $FunctionalProvider<
   }
 }
 
-String _$storageServiceHash() => r'09a8b87f8c378d9971647eb73880edcc6008f6ac';
+String _$storageServiceHash() => r'cdcbd3c24af85c6dcb612e8180eeaac92a6c26ad';

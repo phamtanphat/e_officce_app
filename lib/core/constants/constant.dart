@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class Constant {
   Constant._();
 

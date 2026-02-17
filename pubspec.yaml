@@ -47,6 +47,7 @@ dependencies:
   google_fonts: ^6.3.3
   persistent_bottom_nav_bar: ^6.2.1
   url_launcher: ^6.3.2
+  mcp_toolkit: ^0.4.0
 
 dev_dependencies:
   flutter_test:
